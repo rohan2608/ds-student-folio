@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Download } from "lucide-react";
+import { Menu, X, Download, Settings } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 
 export const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -37,13 +39,13 @@ export const Navigation = () => {
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="font-bold text-xl bg-gradient-primary bg-clip-text text-transparent">
+          <Link to="/" className="font-bold text-xl bg-gradient-primary bg-clip-text text-transparent">
             Alex Chen
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
+            {location.pathname === "/" && navItems.map((item) => (
               <button
                 key={item.label}
                 onClick={() => scrollToSection(item.href)}
@@ -52,6 +54,17 @@ export const Navigation = () => {
                 {item.label}
               </button>
             ))}
+            <Link 
+              to="/profile"
+              className={`text-sm font-medium transition-colors flex items-center gap-2 px-3 py-2 rounded-md ${
+                location.pathname === "/profile" 
+                  ? "text-primary bg-primary/10" 
+                  : "text-muted-foreground hover:text-primary"
+              }`}
+            >
+              <Settings className="w-4 h-4" />
+              Edit Profile
+            </Link>
             <Button 
               size="sm" 
               className="bg-gradient-primary hover:opacity-90 transition-opacity"
@@ -76,7 +89,7 @@ export const Navigation = () => {
         {isOpen && (
           <div className="md:hidden border-t border-border/50 bg-background/95 backdrop-blur-md">
             <div className="py-4 space-y-3">
-              {navItems.map((item) => (
+              {location.pathname === "/" && navItems.map((item) => (
                 <button
                   key={item.label}
                   onClick={() => scrollToSection(item.href)}
@@ -85,6 +98,18 @@ export const Navigation = () => {
                   {item.label}
                 </button>
               ))}
+              <Link 
+                to="/profile"
+                className={`block w-full text-left px-4 py-2 text-sm font-medium transition-colors flex items-center gap-2 ${
+                  location.pathname === "/profile" 
+                    ? "text-primary bg-primary/10" 
+                    : "text-muted-foreground hover:text-primary hover:bg-primary/5"
+                }`}
+                onClick={() => setIsOpen(false)}
+              >
+                <Settings className="w-4 h-4" />
+                Edit Profile
+              </Link>
               <div className="px-4 pt-2">
                 <Button 
                   size="sm" 
