@@ -54,17 +54,6 @@ export const Navigation = () => {
                 {item.label}
               </button>
             ))}
-            <Link 
-              to="/profile"
-              className={`text-sm font-medium transition-colors flex items-center gap-2 px-3 py-2 rounded-md ${
-                location.pathname === "/profile" 
-                  ? "text-primary bg-primary/10" 
-                  : "text-muted-foreground hover:text-primary"
-              }`}
-            >
-              <Settings className="w-4 h-4" />
-              Edit Profile
-            </Link>
             <Button 
               size="sm" 
               className="bg-gradient-primary hover:opacity-90 transition-opacity"
@@ -98,18 +87,6 @@ export const Navigation = () => {
                   {item.label}
                 </button>
               ))}
-              <Link 
-                to="/profile"
-                className={`block w-full text-left px-4 py-2 text-sm font-medium transition-colors flex items-center gap-2 ${
-                  location.pathname === "/profile" 
-                    ? "text-primary bg-primary/10" 
-                    : "text-muted-foreground hover:text-primary hover:bg-primary/5"
-                }`}
-                onClick={() => setIsOpen(false)}
-              >
-                <Settings className="w-4 h-4" />
-                Edit Profile
-              </Link>
               <div className="px-4 pt-2">
                 <Button 
                   size="sm" 
