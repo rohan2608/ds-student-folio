@@ -11,7 +11,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
-import { X, Plus, Save, User, Code, GraduationCap, Mail, Briefcase, Award, Lightbulb, Calendar } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { X, Plus, Save, User, Code, GraduationCap, Mail, Briefcase, Award, Lightbulb, Calendar, BarChart, Database, Brain } from "lucide-react";
 
 // Schemas for form validation
 const personalInfoSchema = z.object({
@@ -80,6 +81,58 @@ export default function Profile() {
   const [newInterest, setNewInterest] = useState("");
   const [achievements, setAchievements] = useState<string[]>(["Google Data Analytics Certificate", "IBM Data Science Professional Certificate"]);
   const [newAchievement, setNewAchievement] = useState("");
+  
+  // Skill categories with progress bars
+  const [skillCategories, setSkillCategories] = useState([
+    {
+      title: "Programming Languages",
+      color: "primary",
+      skills: [
+        { name: "Python", level: 90 },
+        { name: "R", level: 85 },
+        { name: "SQL", level: 80 },
+        { name: "JavaScript", level: 75 },
+        { name: "Java", level: 70 },
+        { name: "C++", level: 65 }
+      ]
+    },
+    {
+      title: "Data Science & ML",
+      color: "secondary",
+      skills: [
+        { name: "Scikit-learn", level: 85 },
+        { name: "Pandas", level: 90 },
+        { name: "NumPy", level: 88 },
+        { name: "TensorFlow", level: 75 },
+        { name: "PyTorch", level: 70 },
+        { name: "Keras", level: 80 }
+      ]
+    },
+    {
+      title: "Data Visualization",
+      color: "accent",
+      skills: [
+        { name: "Matplotlib", level: 85 },
+        { name: "Seaborn", level: 82 },
+        { name: "Plotly", level: 78 },
+        { name: "Tableau", level: 75 },
+        { name: "Power BI", level: 70 },
+        { name: "D3.js", level: 60 }
+      ]
+    },
+    {
+      title: "Databases & Tools",
+      color: "primary",
+      skills: [
+        { name: "MySQL", level: 80 },
+        { name: "PostgreSQL", level: 75 },
+        { name: "MongoDB", level: 70 },
+        { name: "Git", level: 85 },
+        { name: "Docker", level: 65 },
+        { name: "AWS", level: 60 }
+      ]
+    }
+  ]);
   
   // Projects state
   const [featuredProjects, setFeaturedProjects] = useState<ProjectForm[]>([
@@ -300,10 +353,44 @@ export default function Profile() {
     console.log("Technologies:", technologies);
     console.log("Interests:", interests);
     console.log("Achievements:", achievements);
+    console.log("Skill Categories:", skillCategories);
     toast({
       title: "Skills & Technologies Updated",
       description: "Your skills and technologies have been successfully updated.",
     });
+  };
+
+  // Helper functions for skill categories
+  const updateSkillLevel = (categoryIndex: number, skillIndex: number, newLevel: number) => {
+    const updatedCategories = [...skillCategories];
+    updatedCategories[categoryIndex].skills[skillIndex].level = newLevel;
+    setSkillCategories(updatedCategories);
+  };
+
+  const addSkillToCategory = (categoryIndex: number, skillName: string) => {
+    if (!skillName.trim()) return;
+    const updatedCategories = [...skillCategories];
+    const existingSkill = updatedCategories[categoryIndex].skills.find(s => s.name === skillName.trim());
+    if (!existingSkill) {
+      updatedCategories[categoryIndex].skills.push({ name: skillName.trim(), level: 50 });
+      setSkillCategories(updatedCategories);
+    }
+  };
+
+  const removeSkillFromCategory = (categoryIndex: number, skillIndex: number) => {
+    const updatedCategories = [...skillCategories];
+    updatedCategories[categoryIndex].skills.splice(skillIndex, 1);
+    setSkillCategories(updatedCategories);
+  };
+
+  const getIconForCategory = (title: string) => {
+    switch (title) {
+      case "Programming Languages": return Code;
+      case "Data Science & ML": return Brain;
+      case "Data Visualization": return BarChart;
+      case "Databases & Tools": return Database;
+      default: return Code;
+    }
   };
 
   return (
@@ -702,6 +789,91 @@ export default function Profile() {
                 <Button onClick={saveSkillsAndTechnologies} className="w-full">
                   <Save className="w-4 h-4 mr-2" />
                   Save Skills & Technologies
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Skill Categories with Progress Bars */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <BarChart className="w-5 h-5" />
+                  Technical Skills & Progress
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {skillCategories.map((category, categoryIndex) => {
+                  const IconComponent = getIconForCategory(category.title);
+                  return (
+                    <div key={category.title} className="p-4 border rounded-lg bg-muted/30">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className={`w-10 h-10 bg-${category.color}/20 rounded-lg flex items-center justify-center`}>
+                          <IconComponent className={`w-5 h-5 text-${category.color}`} />
+                        </div>
+                        <h4 className="text-lg font-semibold">{category.title}</h4>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        {category.skills.map((skill, skillIndex) => (
+                          <div key={skill.name} className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm font-medium">{skill.name}</span>
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs text-muted-foreground w-10">{skill.level}%</span>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => removeSkillFromCategory(categoryIndex, skillIndex)}
+                                >
+                                  <X className="w-3 h-3" />
+                                </Button>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Progress value={skill.level} className="h-2 flex-1" />
+                              <Input
+                                type="number"
+                                min="0"
+                                max="100"
+                                value={skill.level}
+                                onChange={(e) => updateSkillLevel(categoryIndex, skillIndex, parseInt(e.target.value) || 0)}
+                                className="w-16 h-8 text-xs"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                        
+                        <div className="border-t pt-3">
+                          <div className="flex gap-2">
+                            <Input
+                              placeholder="Add new skill"
+                              onKeyPress={(e) => {
+                                if (e.key === 'Enter') {
+                                  addSkillToCategory(categoryIndex, e.currentTarget.value);
+                                  e.currentTarget.value = '';
+                                }
+                              }}
+                            />
+                            <Button
+                              variant="outline"
+                              onClick={(e) => {
+                                const input = e.currentTarget.previousElementSibling as HTMLInputElement;
+                                addSkillToCategory(categoryIndex, input.value);
+                                input.value = '';
+                              }}
+                            >
+                              <Plus className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+                
+                <Button onClick={saveSkillsAndTechnologies} className="w-full">
+                  <Save className="w-4 h-4 mr-2" />
+                  Save Skill Progress
                 </Button>
               </CardContent>
             </Card>
