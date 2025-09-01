@@ -2,39 +2,35 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { BookOpen, Calendar } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import project1 from "@/assets/project-1.jpg";
 import project2 from "@/assets/project-2.jpg";
 import project3 from "@/assets/project-3.jpg";
 
 export const Projects = () => {
+  const navigate = useNavigate();
   const projects = [
     {
+      id: "1",
       title: "Predictive Healthcare Analytics",
       description: "Machine learning model to predict patient readmission rates using clinical data. Achieved 87% accuracy using ensemble methods and feature engineering techniques.",
       image: project1,
-      technologies: ["Python", "Scikit-learn", "Pandas", "XGBoost", "Flask"],
-      github: "#",
-      demo: "#",
       date: "Dec 2024",
       category: "Machine Learning"
     },
     {
+      id: "2", 
       title: "Neural Network Visualization Tool",
       description: "Interactive web application for visualizing neural network architectures and training processes. Built with React and D3.js for dynamic data visualization.",
       image: project2,
-      technologies: ["React", "D3.js", "TensorFlow.js", "Python", "FastAPI"],
-      github: "#",
-      demo: "#",
       date: "Nov 2024",
       category: "Deep Learning"
     },
     {
+      id: "3",
       title: "Real-time Sales Dashboard",
       description: "End-to-end data pipeline and dashboard for real-time sales analytics. Processes streaming data and provides actionable business insights.",
       image: project3,
-      technologies: ["Python", "Apache Kafka", "PostgreSQL", "Tableau", "Docker"],
-      github: "#",
-      demo: "#",
       date: "Oct 2024",
       category: "Data Engineering"
     }
@@ -99,16 +95,12 @@ export const Projects = () => {
                     {project.description}
                   </p>
                   
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {project.technologies.map((tech) => (
-                      <Badge key={tech} variant="outline" className="text-xs border-primary/30">
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
-                  
                   <div className="flex space-x-4">
-                    <Button size="sm" className="bg-gradient-primary hover:opacity-90">
+                    <Button 
+                      size="sm" 
+                      className="bg-gradient-primary hover:opacity-90"
+                      onClick={() => navigate(`/project/${project.id}`)}
+                    >
                       <BookOpen className="w-4 h-4 mr-2" />
                       Read More
                     </Button>
