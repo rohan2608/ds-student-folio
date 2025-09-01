@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Github, ExternalLink, Calendar } from "lucide-react";
+import { BookOpen, Calendar } from "lucide-react";
 import project1 from "@/assets/project-1.jpg";
 import project2 from "@/assets/project-2.jpg";
 import project3 from "@/assets/project-3.jpg";
@@ -108,13 +108,9 @@ export const Projects = () => {
                   </div>
                   
                   <div className="flex space-x-4">
-                    <Button variant="outline" size="sm" className="border-primary/50 hover:bg-primary/10">
-                      <Github className="w-4 h-4 mr-2" />
-                      View Code
-                    </Button>
                     <Button size="sm" className="bg-gradient-primary hover:opacity-90">
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      Live Demo
+                      <BookOpen className="w-4 h-4 mr-2" />
+                      Read More
                     </Button>
                   </div>
                 </div>
